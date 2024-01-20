@@ -4,15 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: #d9534f;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h2>User Registration</h2>
-
-    <form method="post" action="{% url 'registration' %}">
+    <form id="registrationForm" method="post" action="{% url 'registration' %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
+        <h2>User Registration</h2>
+
+        <label for="id_username">Username:</label>
+        {{ form.username }}
+        <div class="error-message">{{ form.username.errors }}</div>
+
+        <label for="id_email">Email:</label>
+        {{ form.email }}
+        <div class="error-message">{{ form.email.errors }}</div>
+
+        <label for="id_role">Role:</label>
+        {{ form.role }}
+        <div class="error-message">{{ form.role.errors }}</div>
+
+        <label for="id_country">Country:</label>
+        {{ form.country }}
+        <div class="error-message">{{ form.country.errors }}</div>
+
+        <label for="id_nationality">Nationality:</label>
+        {{ form.nationality }}
+        <div class="error-message">{{ form.nationality.errors }}</div>
+
+        <label for="id_mobile">Mobile:</label>
+        {{ form.mobile }}
+        <div class="error-message">{{ form.mobile.errors }}</div>
+
+        <label for="id_password1">Password:</label>
+        {{ form.password1 }}
+        <div class="error-message">{{ form.password1.errors }}</div>
+
+        <label for="id_password2">Confirm Password:</label>
+        {{ form.password2 }}
+        <div class="error-message">{{ form.password2.errors }}</div>
+
+        <button type="submit" onclick="return validateForm()">Register</button>
     </form>
 
+    <script>
+        function validateForm() {
+            var username = document.getElementById("id_username").value.trim();
+            var email = document.getElementById("id_email").value.trim();
+            var mobile = document.getElementById("id_mobile").value.trim();
+            var password1 = document.getElementById("id_password1").value.trim();
+            var password2 = document.getElementById("id_password2").value.trim();
+
+            if (!validateUsername(username)) {
+                alert("Invalid username:Username should contain only alphanumeric characters and underscore.");
+                return false;
+            }
+
+            if (!validateEmail(email)) {
+                alert("Invalid email address");
+                return false;
+            }
+
+           
+
+            if (!validateMobileNumber(mobile)) {
+                alert("Invalid mobile number:Mobile number must start with 6, 7, 8, or 9 and have 10 digits.");
+                return false;
+            }
+
+            if (!validatePassword(password1, password2)) {
+                alert("Invalid password. Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, and one digit. Passwords must match.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateUsername(username) {
+            // Username should contain only alphanumeric characters and underscore
+            var usernamePattern = /^[a-zA-Z0-9_]+$/;
+            return usernamePattern.test(username);
+        }
+
+        function validateEmail(email) {
+            // Email validation using a regular expression
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailPattern.test(email);
+        }
+
+        function validateMobileNumber(mobile) {
+            // Mobile number validation using the provided pattern
+            var mobilePattern = /^(?!([0-9])\1+$)[6789]\d{9}$/;
+            return mobilePattern.test(mobile);
+        }
+
+        function validatePassword(password1, password2) {
+            // Password should be at least 8 characters and include at least one uppercase letter, one lowercase letter, and one digit
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            
+            if (password1 !== password2) {
+                return false; // Passwords do not match
+            }
+
+            return passwordPattern.test(password1);
+        }
+    </script>
 </body>
 </html>

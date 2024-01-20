@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
+  <!-- Include jQuery library -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="customLoginForm" method="post" action="{% url 'login' %}" style="max-width: 400px;">
+    {% csrf_token %}
+    <label for="id_email">Email:</label>
+        {{ form.email }}
+        <div class="error-message">{{ form.email.errors }}</div>
+
+    <label for="id_password">Password:</label>
+    {{ form.password }}
+    <div class="error-message">{{ form.password.errors }}</div>
+    
+    <button type="submit">Login</button>
+  </form>
+  <script>
+    function validateForm() {
+
+        var email = document.getElementById("id_email").value.trim();
+        var password = document.getElementById("id_password").value.trim();
+
+        if (!email || !password) {
+            alert('Please enter both email and password.');
+            return;
+          }
+
+
+        if (!validateEmail(email)) {
+            alert("Invalid email address");
+            return false;
+        }
+
+        if (!validatePassword(password)) {
+            alert("Invalid password. Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, and one digit. Passwords must match.");
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateEmail(email) {
+        // Email validation using a regular expression
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    }
+
+    function validatePassword(password) {
+        // Password should be at least 8 characters and include at least one uppercase letter, one lowercase letter, and one digit
+        var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        
+        return passwordPattern.test(password);
+    }
+</script>
+</body>
+</html>
+
