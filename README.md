@@ -21,7 +21,7 @@
 3. Create and activate a virtual environment (optional but recommended):
 
     ```bash
-    python -m venv env
+    python3 -m venv env
     # On Windows: env\Scripts\activate
     # On macOS/Linux: source env/bin/activate
     ```
@@ -35,7 +35,7 @@
 5. Apply database migrations:
 
     ```bash
-    python manage.py migrate
+    python3 manage.py migrate
     ```
 
 
